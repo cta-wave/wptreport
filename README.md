@@ -24,15 +24,22 @@ the code pretty much anytime I make a change), you can alternatively
 
 This is a command-line tool, it takes some basic options.
 
-`wptreport [--input /path/to/dir] [--output /path/to/dir] [--spec SpecName] [-f] [-m] [-d description]`
+`wptreport [--input /path/to/dir] [--output /path/to/dir] [--ref /path/to/dir] [--pass number] [--tokenFileName bool] [--spec SpecName] [-f] [-m] [-d description]`
 
 * `--input <directory>`, `-i  <directory>`: Path to the directory that contains all the JSON data. 
-  JSON files must match the pattern `\w{2}\d{d}\.json` where the two first letters are an identifier 
+  JSON files must match the pattern `[a-zA-Z]{2}\d+\.json` where the two first letters are an identifier 
   for the browser engine (use whatever makes sense to your audience) and the number is the version 
   number. Defaults to the current directory. This is also where the `filter.js` is found, if any 
   (see the section on filtering).
 * `--output <directory>`, `-o <directory>`: The directory where the generated reports are stored.
   Defaults to the current directory.
+* `--ref <directory>`: Path to directory that contains all JSON data of tests to be used as
+  reference for filtering the report.
+* `--pass`: percent of PASSed reference tests. e.g. 50 means that a test is considered 
+  (displayed in the HTML report) if the same test PASSed on at least 50% of the reference tests
+* `--ignoreFileName`: bool, ignore RegEx pattern for JSON filename
+* `--tokenFileName`: bool, use JSON file names of type `token-UA.json`,
+  e.g. `b8326300-746c-11e8-94ff-57eabbf3ff68-Wk604.json`, where UA has to match pattern `[a-zA-Z]{2}\d+`
 * `--spec SpecName`, `-s SpecName`: The specification name to use in titling the report. Optional, 
   but certainly looks nicer.
 * `--description DescFile`, `-d DescFile`: Include a description of report at the top.
