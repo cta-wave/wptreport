@@ -12,7 +12,8 @@ var fs = require("fs-extra")
 ,   resDir = jn(dn, "res")
 ,   rfs = function (path) { return fs.readFileSync(path, "utf8"); }
 ,   wfs = function (path, content) { fs.writeFileSync(path, content, { encoding: "utf8" }); }
-,   rjson = function (path) { return JSON.parse(rfs(path)); }
+,   fixr = function (report) { report.results = report.results.map(function(r) { if (r.test[0] !== '/') r.test = '/' + r.test; return r;  }); return report }
+,   rjson = function (path) { return fixr(JSON.parse(rfs(path))); }
 ,   wjson = function (path, obj) { wfs(path, JSON.stringify(obj, null, 2)); }
 ,   tmpl = rfs(jn(resDir, "template.html"))
 ,   knownOpts = {
@@ -387,6 +388,8 @@ var consolidate = function (_consolidated, _out) {
                     var st = testData.subtests[j]
                     ,   stName = st.name
                     ;
+                    // do not include undefined subtest names in multi report
+                    if (!stName && options.tokenFileName) continue;
                     if (filter.excludeCase(id, stName)) continue;
                     if (stName === "constructor") stName = "_constructor";
                     // if the message has a comment with a special result, use that to decide what to do
