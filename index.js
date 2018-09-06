@@ -615,7 +615,7 @@ if (Object.keys(refConsolidated).length) {
     // create filter list
     refTestList.forEach(function(result) {
         sortNames(refOut.results[result].subtests).forEach(function(n) {
-            if (refOut.results[result].subtests[n].totals.PASS < refPass) {
+            if (!refOut.results[result].subtests[n].totals.PASS || refOut.results[result].subtests[n].totals.PASS < refPass) {
                 refFilterList.push(n);
             }
         })
