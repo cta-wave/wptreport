@@ -609,21 +609,13 @@ createCompleteFailTable();
 if (Object.keys(refConsolidated).length) {
 
     refOut = consolidate(refConsolidated, refOut);
-    var refTestList = [];
-    refTestList = Object.keys(refOut.results).sort();
-
-    // create filter list
-    refTestList.forEach(function(result) {
-        sortNames(refOut.results[result].subtests).forEach(function(n) {
-            if (!refOut.results[result].subtests[n].totals.PASS || refOut.results[result].subtests[n].totals.PASS < refPass) {
-                refFilterList.push(n);
-            }
-        })
-    })
 
     // define filter excludeCase function
     filter.excludeCase = function (id, name) {
-        if (refFilterList.includes(name)) {
+        var refOutResult = refOut.results[id];
+        var refOutResultSubtest = refOutResult && refOutResult.subtests && refOutResult.subtests[name];
+        var refOutResultSubtestPASS = refOutResultSubtest && refOutResultSubtest.totals && refOutResultSubtest.totals.PASS;
+        if(!refOutResultSubtestPASS || refOutResultSubtestPASS < refPass){
             return true;
         }
         return false;
