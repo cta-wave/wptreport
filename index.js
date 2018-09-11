@@ -479,6 +479,9 @@ var createAllTable = function (tableName) {
     ;
     for (var i = 0, n = all.length; i < n; i++) {
         var test = all[i];
+        if (test.subtests.length === 0) { // exclude tests with no subtests from report
+            continue;
+        };
         table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='https://github.com/cta-wave/WMAS2017/blob/wmas2017-tests" + esc(test.name) + "' target='_blank'>" +
                  esc(test.name) + "</a></td>" + cells(test.status) + "</tr>\n";
         toc += "<li><a href='#test-file-" + i + "'>" + esc(test.name) + "</a></li>\n";
