@@ -480,11 +480,13 @@ var createAllTable = function (tableName) {
     ,   toc = startToc
     ,   subtests = 0
     ;
+    var numberOfTestFiles = 0;
     for (var i = 0, n = all.length; i < n; i++) {
         var test = all[i];
         if (test.subtests.length === 0) { // exclude tests with no subtests from report
             continue;
         };
+        numberOfTestFiles++;
         table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='https://github.com/cta-wave/WMAS2017/blob/wmas2017-tests" + esc(test.name) + "' target='_blank'>" +
                  esc(test.name) + "</a></td>" + cells(test.status) + "</tr>\n";
         toc += "<li><a href='#test-file-" + i + "'>" + esc(test.name) + "</a></li>\n";
@@ -501,7 +503,7 @@ var createAllTable = function (tableName) {
     }
     toc += "</ol>";
 
-    var meta = "<p><strong>Test files</strong>: " + all.length +
+    var meta = "<p><strong>Test files</strong>: " + numberOfTestFiles +
                "; <strong>Total subtests</strong>: " + subtests + "</p>"
     ;
 
