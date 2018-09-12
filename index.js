@@ -249,6 +249,7 @@ var options = {
     ,   pass:       parsed.pass || defaults ['pass'] || 0
     ,   ignoreFileName: parsed.ignoreFileName || defaults['ignoreFileName'] || false
     ,   tokenFileName: parsed.tokenFileName || defaults['tokenFileName'] || false
+    ,   overwrite: parsed.overwrite || defaults['overwrite'] || false
     }
 ,   prefix = options.spec ? options.spec + ": " : ""
 ;
@@ -270,6 +271,8 @@ if (options.help) {
     ,   "   --pass*  percent of PASSed reference tests. e.g. 50 means that a test is considered"
     ,   "           (displayed in the HTML report) if the same test PASSed on at least 50% of"
     ,   "           the reference tests"
+    ,   "   --overwrite*  bool, optionally used with --ref. Instead of creating a all_filtered.html report, the"
+    ,   "           all.html will be overwritten with the filtered report results"
     ,   "   --failures*, -f to include any failure message text"
     ,   "   --markdown*, -m to interpret subtest name as Markdown"
     ,   "   --description*, -d description file to use to annotate the report."
@@ -648,7 +651,11 @@ if (Object.keys(refConsolidated).length) {
     testList.forEach(createResult);
 
     // create the html report
-    createAllTable('all_filtered.html');
+    if (options.overwrite) {
+        createAllTable('all.html');
+    } else {
+        createAllTable('all_filtered.html');
+    }
 }
 
 // copy resources over
