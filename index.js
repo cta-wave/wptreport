@@ -349,18 +349,10 @@ var consolidate = function (_consolidated, _out) {
         for (var i = 0, n = _consolidated[agent].results.length; i < n; i++) {
             var testData = _consolidated[agent].results[i]
             ,   id = testData.test
-            ,   hasFailedSubtests = false;
             ;
             if (filter.excludeFile(id)) continue;
             if (!testData.subtests.length && filter.excludeCase(id, id)) continue; // manual/reftests
-            for (var k = 0; k < testData.subtests.length; k++) {
-                var subtest = testData.subtests[k];
-                if (filter.excludeCase(id, subtest.name)) {
-                    hasFailedSubtests = true;
-                    break;
-                }
-            }
-            if (hasFailedSubtests) continue; // exclude test in report if reference has failed subtests in test
+            if (filter.excludeFailed && filter.excludeFailed(id)) continue; // exclude test in report if reference has failed subtests
             if (!_out.results[id]) {
                 _out.results[id] = {
                     byUA:       {}
@@ -635,6 +627,14 @@ if (Object.keys(refConsolidated).length) {
         if(!refOutResultSubtestPASS || refOutResultSubtestPASS < refPass){
             return true;
         }
+        return false;
+    };
+
+    filter.excludeFailed = function (id) {
+        var refOutResult = refOut.results[id];
+        for (x in refOutResult.subtests)
+            if (refOutResult.subtests.hasOwnProperty(x))
+                if (refOutResult.subtests[x].totals.FAIL > 0) return true;
         return false;
     };
 
