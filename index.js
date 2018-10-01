@@ -632,9 +632,12 @@ if (Object.keys(refConsolidated).length) {
 
     filter.excludeFailed = function (id) {
         var refOutResult = refOut.results[id];
-        for (x in refOutResult.subtests)
-            if (refOutResult.subtests.hasOwnProperty(x))
-                if (refOutResult.subtests[x].totals.FAIL > 0) return true;
+        for (x in refOutResult.subtests) {
+            if (refOutResult.subtests.hasOwnProperty(x)) {
+                var totals  = refOutResult.subtests[x].totals;
+                if (totals.FAIL > 0 || totals.TIMEOUT > 0 || totals.NOTRUN > 0) return true;
+            }
+        }
         return false;
     };
 
