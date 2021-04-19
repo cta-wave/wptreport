@@ -1,5 +1,8 @@
-
 # wptreport - Report generator for WPT test result sets
+
+This WAVE repo holds the component that creates WMATS HTML reports from JSON; it is an extension of [/w3c/wptreport](https://github.com/w3c/wptreport).  It was created as an offshoot of (repo) dpctf-deploy, to make files available that otherwise would have been behind a corporate firewall.
+
+## Introduction
 
 If you use the [WPT test runner](http://w3c-test.org/tools/runner/index.html) you are getting a 
 bunch of JSON test results which you can't do much that's immediately, humanly useful with. There
