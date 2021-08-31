@@ -488,7 +488,7 @@ var createAllTable = function (tableName) {
             continue;
         };
         numberOfTestFiles++;
-        table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='https://github.com/cta-wave/WMAS2017/blob/wmas2017-tests" + esc(test.name) + "' target='_blank'>" +
+        table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='https://github.com/cta-wave/dpctf-tests/tree/master/generated" + esc(test.name) + "' target='_blank'>" +
                  esc(test.name) + "</a></td>" + cells(test.status) + "</tr>\n";
         toc += "<li><a href='#test-file-" + i + "'>" + esc(test.name) + "</a></li>\n";
         for (var j = 0, m = test.subtests.length; j < m; j++) {
@@ -531,7 +531,7 @@ var createLessThanTwoTable = function () {
                      (100 * test.fails.length / test.total).toFixed(2) + "%, " +
                      (100 * test.fails.length / totalSubtests).toFixed(2) + "% of total)</small>"
         ;
-        table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='https://github.com/cta-wave/WMAS2017/blob/wmas2017-tests" + esc(test.name) + "' target='_blank'>" +
+        table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='https://github.com/cta-wave/dpctf-tests/tree/master/generated" + esc(test.name) + "' target='_blank'>" +
                  esc(test.name) + "</a> " + details + "</td>" + cells(test.status) + "</tr>\n";
         toc += "<li><a href='#test-file-" + i + "'>" + esc(test.name) + "</a> " + details + "</li>\n";
         for (var j = 0, m = test.fails.length; j < m; j++) {
@@ -576,7 +576,7 @@ var createCompleteFailTable = function () {
                      (100 * test.boom.length / test.total).toFixed(2) + "%, " +
                      (100 * test.boom.length / totalSubtests).toFixed(2) + "% of total)</small>"
         ;
-        table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='https://github.com/cta-wave/WMAS2017/blob/wmas2017-tests" + esc(test.name) + "' target='_blank'>" +
+        table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='https://github.com/cta-wave/dpctf-tests/tree/master/generated" + esc(test.name) + "' target='_blank'>" +
                  esc(test.name) + "</a> " + details + "</td>" + cells(test.status) + "</tr>\n";
         toc += "<li><a href='#test-file-" + i + "'>" + esc(test.name) + "</a> " + details + "</li>\n";
         for (var j = 0, m = test.boom.length; j < m; j++) {
