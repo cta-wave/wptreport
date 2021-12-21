@@ -584,6 +584,8 @@ var createLessThanTwoTable = function () {
                (100 * fails / totalSubtests).toFixed(2) + "%)</p>"
     ;
 
+    meta += "<h3>Test Config</h3><p>" + createMeta(out.meta) + "</p>";
+
     wfs(jn(options.output, "less-than-2.html")
     ,   interpolate({
             title: prefix + "Less Than 2 Passes"
@@ -628,6 +630,8 @@ var createCompleteFailTable = function () {
                "; <strong>Failure level</strong>: " + fails + "/" + totalSubtests + " (" +
                (100 * fails / totalSubtests).toFixed(2) + "%)</p>"
     ;
+
+    meta += "<h3>Test Config</h3><p>" + createMeta(out.meta) + "</p>";
 
     wfs(jn(options.output, "complete-fails.html")
     ,   interpolate({
