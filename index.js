@@ -31,6 +31,7 @@ var fs = require("fs-extra")
                 ,   pass:       Number
                 ,   ignoreFileName:  Boolean
                 ,   tokenFileName:  Boolean
+                ,   testsBaseUrl: String
                 }
 ,   shortHands = {
                     i:      ["--input"]
@@ -46,6 +47,7 @@ var fs = require("fs-extra")
 ,   out = {
         ua: []
     ,   results: {}
+    ,   meta: {}
     }
 ,   refOut = {
         ua: []
@@ -199,6 +201,7 @@ var fs = require("fs-extra")
                     });
                 } else {
                     _consolidated[name] = rjson(jn(dir, f));
+
                 }
             } else if (options.tokenFileName === true && m !== 0) {
                 _consolidated[m[1].substr(0,5) + '<br>' + m[2]] = rjson(jn(dir, f));
@@ -250,6 +253,7 @@ var options = {
     ,   ignoreFileName: parsed.ignoreFileName || defaults['ignoreFileName'] || false
     ,   tokenFileName: parsed.tokenFileName || defaults['tokenFileName'] || false
     ,   overwrite: parsed.overwrite || defaults['overwrite'] || false
+    ,   testsBaseUrl: parsed.testsBaseUrl || defaults['testsBaseUrl'] || ""
     }
 ,   prefix = options.spec ? options.spec + ": " : ""
 ;
@@ -281,6 +285,7 @@ if (options.help) {
     ,   "   --spec*, -s SpecName to use in titling the report."
     ,   "   --ignoreFileName*    bool, ignore RegEx pattern for JSON filename."
     ,   "   --tokenFileName*     bool, use JSON files with name of type token-UA.json"
+    ,   "   --testsBaseUrl*    string, the base URL of the location of the tests"
     ,   "   --help, -h to produce this message."
     ,   "   --version, -v to show the version number."
     ,   ""
@@ -343,9 +348,9 @@ var consolidate = function (_consolidated, _out) {
             subtestsPerTest[id] = true;
         });
     });
-
     for (var agent in _consolidated) {
         _out.ua.push(agent);
+        _out.meta = _consolidated[agent].meta;
         for (var i = 0, n = _consolidated[agent].results.length; i < n; i++) {
             var testData = _consolidated[agent].results[i]
             ,   id = testData.test
@@ -475,7 +480,6 @@ var startTable = "<thead><tr class='persist-header'><th>Test <span class='messag
 ,   description = (options.description !== "") ? rfs(jn(options.input, options.description)) : ""
 ;
 
-
 var createAllTable = function (tableName) {
     var table = startTable
     ,   toc = startToc
@@ -486,9 +490,9 @@ var createAllTable = function (tableName) {
         var test = all[i];
         if (test.subtests.length === 0) { // exclude tests with no subtests from report
             continue;
-        };
+        }
         numberOfTestFiles++;
-        table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='https://github.com/cta-wave/WMAS2017/blob/wmas2017-tests" + esc(test.name) + "' target='_blank'>" +
+        table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='" + esc(options.testsBaseUrl + test.name) + "' target='_blank'>" +
                  esc(test.name) + "</a></td>" + cells(test.status) + "</tr>\n";
         toc += "<li><a href='#test-file-" + i + "'>" + esc(test.name) + "</a></li>\n";
         for (var j = 0, m = test.subtests.length; j < m; j++) {
@@ -508,6 +512,8 @@ var createAllTable = function (tableName) {
                "; <strong>Total subtests</strong>: " + subtests + "</p>"
     ;
 
+    meta += "<h3>Test Config</h3><p>" + createMeta(out.meta) + "</p>";
+
     wfs(jn(options.output, tableName)
     ,   interpolate({
             title: prefix + "All Results"
@@ -518,6 +524,31 @@ var createAllTable = function (tableName) {
         ,   desc:   description
         })
     );
+};
+
+var beautifyConfigName = function(key){
+    var split = key.split("_");
+    return split.join(" ");
+}
+
+var createMeta = function(meta, spaces){
+    spaces = spaces || "";  
+    var res = "";
+    for(var i in meta){
+        var v = meta[i];
+        if(typeof v === "object") {
+            if(v instanceof Array) {
+                res += spaces + "<strong>- " + beautifyConfigName(i) + "</strong>: [" + v.toString(", ") + "] <br>";
+            }
+            else {
+                res += spaces + "<strong>- " + beautifyConfigName(i) + "</strong><br>" + createMeta(v, spaces+ "&nbsp;&nbsp;&nbsp;&nbsp;");
+            }
+        }
+        else {
+            res += spaces + "<strong>- " + beautifyConfigName(i) + "</strong>: " + v + " <br>";
+        }
+    }
+    return res;
 };
 
 var createLessThanTwoTable = function () {
@@ -531,7 +562,7 @@ var createLessThanTwoTable = function () {
                      (100 * test.fails.length / test.total).toFixed(2) + "%, " +
                      (100 * test.fails.length / totalSubtests).toFixed(2) + "% of total)</small>"
         ;
-        table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='https://github.com/cta-wave/WMAS2017/blob/wmas2017-tests" + esc(test.name) + "' target='_blank'>" +
+        table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='" + esc(options.testsBaseUrl + test.name) + "' target='_blank'>" +
                  esc(test.name) + "</a> " + details + "</td>" + cells(test.status) + "</tr>\n";
         toc += "<li><a href='#test-file-" + i + "'>" + esc(test.name) + "</a> " + details + "</li>\n";
         for (var j = 0, m = test.fails.length; j < m; j++) {
@@ -576,7 +607,7 @@ var createCompleteFailTable = function () {
                      (100 * test.boom.length / test.total).toFixed(2) + "%, " +
                      (100 * test.boom.length / totalSubtests).toFixed(2) + "% of total)</small>"
         ;
-        table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='https://github.com/cta-wave/WMAS2017/blob/wmas2017-tests" + esc(test.name) + "' target='_blank'>" +
+        table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='" + esc(options.testsBaseUrl + test.name) + "' target='_blank'>" +
                  esc(test.name) + "</a> " + details + "</td>" + cells(test.status) + "</tr>\n";
         toc += "<li><a href='#test-file-" + i + "'>" + esc(test.name) + "</a> " + details + "</li>\n";
         for (var j = 0, m = test.boom.length; j < m; j++) {
@@ -647,6 +678,7 @@ if (Object.keys(refConsolidated).length) {
     out = {
         ua: []
     ,   results: {}
+    ,   meta: {}
     };
     uaPass = {}
     all = [];

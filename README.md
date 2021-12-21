@@ -45,6 +45,7 @@ This is a command-line tool, it takes some basic options.
   e.g. `b8326300-746c-11e8-94ff-57eabbf3ff68-Wk604.json`, where UA has to match pattern `[a-zA-Z]{2}\d+`
 * `--spec SpecName`, `-s SpecName`: The specification name to use in titling the report. Optional, 
   but certainly looks nicer.
+* `--testsBaseUrl`: The base URL of the location of the tests e.g. https://github.com/cta-wave/WMAS/tree/wmas2018-tests to locate WMAS2018 tests in GitHub.
 * `--description DescFile`, `-d DescFile`: Include a description of report at the top.
 * `--failures`, `-f`: Include messages about failures in report.
 * `--markdown`, `-m`: Interpret subtest names as markdown.
