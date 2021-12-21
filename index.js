@@ -512,7 +512,9 @@ var createAllTable = function (tableName) {
                "; <strong>Total subtests</strong>: " + subtests + "</p>"
     ;
 
-    meta += "<h3>Test Config</h3><p>" + createMeta(out.meta) + "</p>";
+    if(out.meta) {
+        meta += "<h3>Test Config</h3><p>" + createMeta(out.meta) + "</p>";
+    }
 
     wfs(jn(options.output, tableName)
     ,   interpolate({
@@ -583,8 +585,9 @@ var createLessThanTwoTable = function () {
                "; <strong>Failure level</strong>: " + fails + "/" + totalSubtests + " (" +
                (100 * fails / totalSubtests).toFixed(2) + "%)</p>"
     ;
-
-    meta += "<h3>Test Config</h3><p>" + createMeta(out.meta) + "</p>";
+    if(out.meta) {
+        meta += "<h3>Test Config</h3><p>" + createMeta(out.meta) + "</p>";
+    }
 
     wfs(jn(options.output, "less-than-2.html")
     ,   interpolate({
@@ -630,8 +633,9 @@ var createCompleteFailTable = function () {
                "; <strong>Failure level</strong>: " + fails + "/" + totalSubtests + " (" +
                (100 * fails / totalSubtests).toFixed(2) + "%)</p>"
     ;
-
-    meta += "<h3>Test Config</h3><p>" + createMeta(out.meta) + "</p>";
+    if(out.meta) {
+        meta += "<h3>Test Config</h3><p>" + createMeta(out.meta) + "</p>";
+    }
 
     wfs(jn(options.output, "complete-fails.html")
     ,   interpolate({
