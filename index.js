@@ -3,7 +3,7 @@
 /* globals showdown */
 /* jshint sub:true, laxcomma:true, strict:false, -W116 */
 
-const TEST_FILES_BASE_URL = "https://github.com/cta-wave/WMAS2017/blob/wmas2017-tests"
+const TEST_FILES_BASE_URL = "https://github.com/cta-wave/WMAS/blob/wmas2021-tests"
 
 var fs = require("fs-extra")
 ,   pth = require("path")
